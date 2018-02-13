@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+
+status = `git status`.split("\n").reverse
+
+untracked_files = []
+done            = false
+
+status.each do |s|
+  if !done && File.exist?(s.strip.chomp)
+    untracked_files.push(s)
+  end
+  if s.include?("Untracked files:")
+    done = true
+  end
+end
+
+untracked_files.each do |s|
+  puts "rm -rf #{s}"
+  system "rm -rf #{s}"
+end
